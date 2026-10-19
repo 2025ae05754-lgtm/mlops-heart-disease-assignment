@@ -1,5 +1,6 @@
 import os
 import joblib
+import numpy as np
 import pandas as pd
 
 def test_trained_pipeline_artifact_validity():

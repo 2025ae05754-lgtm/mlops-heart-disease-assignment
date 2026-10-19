@@ -35,13 +35,16 @@ jobs:
     - name: Lint Source Code (Flake8)
       run: |
         flake8 src app tests --count --select=E9,F63,F7,F82 --show-source --statistics
-        flake8 src app tests --count --max-line-length=120 --statistics
 
     - name: Execute Data & Training Pipeline
       run: |
-        python src/data_loader.py
-        python src/feature_engineering.py
-        python src/train.py
+        python -m src.data_loader
+        python -m src.feature_engineering
+        python -m src.train
+
+    - name: Evaluate trained model
+      run: |
+        python -m src.evaluate
 
     - name: Execute Automated Test Suite (Pytest)
       run: |

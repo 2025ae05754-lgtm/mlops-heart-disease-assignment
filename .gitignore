@@ -6,8 +6,12 @@ venv/
 mlruns/
 data/raw/*
 !data/raw/.gitkeep
+!data/raw/processed.cleveland.data
+!data/raw/heart-disease/
+!data/raw/heart-disease/**
 data/processed/*
 !data/processed/.gitkeep
 models/*.joblib
+!models/cardiac_risk_pipeline.joblib
 screenshots/
 .DS_Store

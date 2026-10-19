@@ -9,5 +9,6 @@ data/raw/*
 data/processed/*
 !data/processed/.gitkeep
 models/*.joblib
+!models/cardiac_risk_pipeline.joblib
 screenshots/
 .DS_Store

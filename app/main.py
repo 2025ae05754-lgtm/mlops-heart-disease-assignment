@@ -2,6 +2,7 @@ import os
 import joblib
 import pandas as pd
 import logging
+from app.config import settings
 from fastapi import FastAPI, HTTPException
 from app.schemas import CardiacDataPayload, CardiacPredictionResponse
 from prometheus_fastapi_instrumentator import Instrumentator
@@ -18,26 +19,41 @@ app = FastAPI(
 # Instrument Prometheus Metrics
 Instrumentator().instrument(app).expose(app)
 
-MODEL_PATH = os.path.join("models", "cardiac_risk_pipeline.joblib")
+MODEL_PATH = settings.MODEL_PATH
 model_pipeline = None
+
+def load_model():
+    if not os.path.exists(MODEL_PATH):
+        logger.error(f"Critical error: Model binary missing at {MODEL_PATH}")
+        return None
+
+    try:
+        pipeline = joblib.load(MODEL_PATH)
+        logger.info("Successfully loaded ML pipeline artifact.")
+        return pipeline
+    except Exception:
+        logger.exception("Critical error: Failed to load ML pipeline artifact.")
+        return None
 
 @app.on_event("startup")
 def initialize_model():
     global model_pipeline
-    if os.path.exists(MODEL_PATH):
-        model_pipeline = joblib.load(MODEL_PATH)
-        logger.info("Successfully loaded ML pipeline artifact.")
-    else:
-        logger.error(f"Critical error: Model binary missing at {MODEL_PATH}")
+    model_pipeline = load_model()
 
 @app.get("/health", tags=["System Health"])
 def health_check():
+    global model_pipeline
+    if model_pipeline is None:
+        model_pipeline = load_model()
     if model_pipeline is None:
         raise HTTPException(status_code=503, detail="Model pipeline uninitialized.")
     return {"status": "healthy", "model_loaded": True}
 
 @app.post("/predict", response_model=CardiacPredictionResponse, tags=["Inference"])
 def predict_cardiac_risk(payload: CardiacDataPayload):
+    global model_pipeline
+    if model_pipeline is None:
+        model_pipeline = load_model()
     if model_pipeline is None:
         raise HTTPException(status_code=503, detail="Model pipeline is unavailable.")
 

@@ -1,7 +1,6 @@
 import os
 import joblib
 import pandas as pd
-import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
 
@@ -17,10 +16,10 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.ensemble import RandomForestClassifier, GradientBoostingClassifier
 from sklearn.metrics import (
     accuracy_score, precision_score, recall_score, f1_score,
-    roc_auc_score, confusion_matrix, roc_curve
+    roc_auc_score, confusion_matrix
 )
 
-from feature_engineering import ClinicalFeatureBuilder, PROCESSED_PATH
+from src.feature_engineering import ClinicalFeatureBuilder, PROCESSED_PATH
 
 def build_full_pipeline(classifier) -> Pipeline:
     """Constructs an end-to-end scikit-learn pipeline including feature engineering and scaling."""
