@@ -1,5 +1,7 @@
 {
+    "id": null,
     "title": "Cardiac Risk API",
+    "uid": "cardiac-risk-api",
     "schemaVersion": 39,
     "panels": [
         {
@@ -7,7 +9,12 @@
             "type": "timeseries",
             "targets": [
                 {
-                    "expr": "rate(prediction_requests_total[5m])"
+                    "expr": "sum(rate(http_requests_total{handler=\"/predict\"}[5m]))",
+                    "refId": "A",
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "prometheus"
+                    }
                 }
             ]
         },
@@ -16,7 +23,12 @@
             "type": "timeseries",
             "targets": [
                 {
-                    "expr": "histogram_quantile(0.95, rate(prediction_latency_seconds_bucket[5m]))"
+                    "expr": "histogram_quantile(0.95, sum(rate(http_request_duration_seconds_bucket{handler=\"/predict\"}[5m])) by (le))",
+                    "refId": "A",
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "prometheus"
+                    }
                 }
             ]
         }

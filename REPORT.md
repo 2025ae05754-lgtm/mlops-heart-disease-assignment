@@ -176,8 +176,10 @@ use a registry image and an appropriate pull policy for a public cluster.
 
 ## 9. Monitoring and operations
 
-Prometheus scrapes `cardiac_api:8000/metrics` every five seconds. Grafana is
-configured with a dashboard under `monitoring/grafana_dashboard.json`.
+Prometheus scrapes `cardiac_api:8000/metrics` every five seconds. Docker Compose
+automatically provisions the Prometheus data source and the dashboard from
+`monitoring/grafana_dashboard.json` using the files under
+`monitoring/grafana/provisioning/`.
 Application logs record model loading, prediction outcomes, confidence, and
 inference failures. The load generator in `scripts/load_test.py` can produce
 traffic for a local dashboard demonstration.

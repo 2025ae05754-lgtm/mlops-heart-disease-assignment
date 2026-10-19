@@ -29,4 +29,7 @@ services:
       - "3000:3000"
     environment:
       - GF_SECURITY_ADMIN_PASSWORD=admin
+    volumes:
+      - ./monitoring/grafana/provisioning:/etc/grafana/provisioning:ro
+      - ./monitoring/grafana_dashboard.json:/var/lib/grafana/dashboards/cardiac-risk-api.json:ro
     restart: always
