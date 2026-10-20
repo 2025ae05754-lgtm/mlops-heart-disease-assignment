@@ -83,7 +83,7 @@ def generate_eda_report(df: pd.DataFrame, save_dir: str = "screenshots") -> None
     plt.close()
 
 if __name__ == "__main__":
-    from data_loader import fetch_uci_dataset
+    from src.data_loader import fetch_uci_dataset
     df_raw = fetch_uci_dataset()
     df_clean = process_raw_data(df_raw)
     os.makedirs(os.path.dirname(PROCESSED_PATH), exist_ok=True)
